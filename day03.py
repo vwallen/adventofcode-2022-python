@@ -12,14 +12,14 @@ def chunk(sequence, size):
 
 def part_1(input):
     rucksacks = [(line[:len(line)//2], line[len(line)//2:]) for line in input]
-    intersects = [tuple(set(a) & set(b))[0] for a, b in rucksacks]
+    intersects = [(set(a) & set(b)).pop() for a, b in rucksacks]
     values = [CODES.index(c) for c in intersects]
     return sum(values)
 
 def part_2(input):
     badges = []
     for a, b, c in chunk(input, 3):
-        (badge,) = set(a) & set(b) & set(c)
+        badge = (set(a) & set(b) & set(c)).pop()
         badges.append(CODES.index(badge))
     return sum(badges)
 
