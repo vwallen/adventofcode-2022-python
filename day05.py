@@ -18,8 +18,8 @@ def prepare(file_path):
     commands = []
     for line in command_section:
         if line.strip() != '':
-            x, a, y, f, z, t = line.split(" ")
-            commands.append((int(f) - 1, int(t) - 1, int(a)))
+            a, f, t = map(int, line.split(" ")[1::2])
+            commands.append((f - 1, t - 1, a))
 
     return inventory, commands
 
