@@ -14,23 +14,16 @@ def vadd(v, n):
         return v * 1
     return (m + n) * (v / m)
 
-def mv(vec_h, vec_t, mv_h):
+def mv_both(vec_h, vec_t, mv_h):
     vec_h = vec_h + mv_h
-    mv_t = np.round(vadd(vec_h - vec_t, -1))
-    vec_t = vec_t + mv_t
+    mov_t = np.round(vadd(vec_h - vec_t, -1))
+    vec_t = vec_t + mov_t
     return vec_h, vec_t
 
-def walk(vec_a, vec_b):
-    pp = []
-    va = np.array([0,0])
-    vb = vec_a - vec_b
-    while not (va == vb).all():
-        dm = mag(vb - va)
-        if dm < 1.5:
-            break
-        vb = vb - np.round((vb - va)/dm)
-        pp.append(vec_a + vb)
-    return pp
+def mv_tail(vec_h, vec_t, mv_h):
+    mov_t = np.round(vadd(vec_h - vec_t, -1))
+    vec_t = vec_t + mov_t
+    return vec_t, mov_t
 
 #---------------------------------------------------------------
 
@@ -52,24 +45,40 @@ def prepare(file_path):
     return moves
 
 def part_1(moves):
+    visited = {(0.0, 0.0),}
+
     vec_h = np.array((0, 0))
     vec_t = np.array((0, 0))
-
-    visited = {(0.0, 0.0),}
     for move in moves:
-        vec_hn, vec_tn = mv(vec_h, vec_t, move)
+        mna = max(abs(move))
+        for _ in range(1, int(mna + 1)):
+            mov_h = move/mna
+            vec_h, vec_t = mv_both(vec_h, vec_t, mov_h)
 
-        visited.add(tuple(vec_tn))
-        for p in walk(vec_t, vec_tn):
-            visited.add(tuple(p))
-
-        vec_h = vec_hn
-        vec_t = vec_tn
+            visited.add(tuple(vec_t))
 
     return len(visited)
 
 def part_2(moves):
-    return 1
+
+    visited = {(0.0, 0.0),}
+
+    vec_h = np.array((0.0, 0.0))
+    vecs_t = [np.array((0.0, 0.0)) for n in range(9)]
+    for move in moves:
+        mna = max(abs(move))
+        for i in range(1, int(mna + 1)):
+            mov_t = move/mna
+            vec_h = vec_h + mov_t
+            vec_th = vec_h
+            for i, vec_t in enumerate(vecs_t):
+                vec_th, mov_t = mv_tail(vec_th, vec_t, mov_t)
+                vecs_t[i] = vec_th
+
+            visited.add(tuple(vecs_t[8]))
+
+    return len(visited)
+
 
 if __name__ == '__main__':
     moves = prepare('input/day09.txt')
@@ -80,12 +89,12 @@ if __name__ == '__main__':
 #---------------------------------------------------------------
 import pytest
 
-@pytest.fixture
-def moves():
-    return prepare('input/day09-example.txt')
-
-def test_part_1(moves):
+def test_part_1():
+    moves = prepare('input/day09-example-1.txt')
     assert part_1(moves) == 13
 
-def test_part_2(moves):
+def test_part_2():
+    moves = prepare('input/day09-example-1.txt')
     assert part_2(moves) == 1
+    moves = prepare('input/day09-example-2.txt')
+    assert part_2(moves) == 36

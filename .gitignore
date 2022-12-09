@@ -2,6 +2,6 @@ __pycache__
 .DS_Store
 
 input/*
-!input/*-example.txt
+!input/*example*.txt
 .ipynb_checkpoints
 *.ipynb
