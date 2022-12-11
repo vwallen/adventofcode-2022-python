@@ -37,8 +37,8 @@ def part_2(inventory, commands):
 
 if __name__ == '__main__':
     print("--------- Day 3 -----------")
-    print("Part 1: %s" % part_1(*prepare('input/day05.txt')))
-    print("Part 2: %s" % part_2(*prepare('input/day05.txt')))
+    print("⭐ %s" % part_1(*prepare('input/day05.txt')))
+    print("⭐ %s" % part_2(*prepare('input/day05.txt')))
 
 #---------------------------------------------------------------
 import pytest
