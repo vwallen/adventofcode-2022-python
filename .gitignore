@@ -3,5 +3,6 @@ __pycache__
 
 input/*
 !input/*example*.txt
+!input/*-frame.txt
 .ipynb_checkpoints
 *.ipynb
